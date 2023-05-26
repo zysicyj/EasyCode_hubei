@@ -1,0 +1,32 @@
+#* @vtlvariable name="transformPackageName" type="java.lang.String" *#
+##引入宏定义
+$!{define.vm}
+$!{init.vm}
+$!{mybatisCodehelper.vm}
+
+##使用宏定义设置回调（保存位置与文件后缀）
+###save("/entity", ".java")
+
+#set($entitySavePath = $tool.append(${javamodelSrcFolder},"/",${transformPackageName.replace(".","/")}))
+
+$!callback.setSavePath($entitySavePath)
+$!callback.setFileName($tool.append($tableInfo.name,'Transform', ".java"))
+##使用宏定义设置包后缀
+package ${transformPackageName};
+##使用全局变量实现默认包导入
+import java.io.Serializable;
+
+import com.nari.core.basic.BasicMapper;
+import $!{modelPackageName}.$!{tableInfo.name};
+import $!{paramPackageName}.$!{tableInfo.name}Param;
+import $!{viewPackageName}.$!{tableInfo.name}View;
+import $!{dtoPackageName}.$!{tableInfo.name}Dto;
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
+
+##使用宏定义实现类注释信息
+#tableComment("数据转换")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface  $!{tableInfo.name}Transform extends BasicMapper<$!{tableInfo.name},$!{tableInfo.name}Param,$!{tableInfo.name}Dto,$!{tableInfo.name}View> {
+}

@@ -1,0 +1,38 @@
+##定义初始变量
+$!{mybatisCodehelper.vm}
+$!{init.vm}
+$!{define.vm}
+#set($controllerName = $tool.append($tableInfo.name, "Controller"))
+##设置回调
+#set($controllerSavePath = $tool.append(${controllerSrcFolder},"/",${controllerPackageName.replace(".","/")}))
+
+$!callback.setSavePath($controllerSavePath)
+$!callback.setFileName($tool.append($controllerName, ".java"))
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+
+package ${controllerPackageName};
+
+import com.nari.core.basic.BasicController;
+import $!{modelPackageName}.$!{tableInfo.name};
+import $!{paramPackageName}.$!{tableInfo.name}Param;
+import $!{viewPackageName}.$!{tableInfo.name}View;
+import $!{transformPackageName}.$!{tableInfo.name}Transform;
+import $!{dtoPackageName}.$!{tableInfo.name}Dto;
+import ${servicePackageName}.$!{tableInfo.name}Service;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import lombok.extern.slf4j.Slf4j;
+import javax.annotation.Resource;
+import javax.validation.Valid;
+
+#tableComment('路由管理')
+@Controller
+@Valid
+@Slf4j
+@RequestMapping("$!tool.firstLowerCase($tableInfo.name)")
+public class $!{controllerName} extends BasicController<$!{tableInfo.name}, $!{tableInfo.name}Param, $!{tableInfo.name}View, $!{tableInfo.name}Dto, $!{tableInfo.name}Transform> {
+
+}

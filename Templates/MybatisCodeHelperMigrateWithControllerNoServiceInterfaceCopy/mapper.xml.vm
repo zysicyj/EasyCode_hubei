@@ -1,0 +1,36 @@
+##引入mybatis支持
+$!{mybatisSupport.vm}
+$!{mybatisCodehelper.vm}
+
+##设置保存名称与保存位置
+#set($XmlSavePath = $tool.append(${mapperXmlFolder},"/",${mapperXmlPackage.replace(".","/")}))
+$!callback.setSavePath($XmlSavePath)
+$!callback.setFileName($tool.append($!{tableInfo.name}, $!{mapperSuffix},".xml"))
+
+#set($daoName = $tool.append($tableInfo.name, ${daoSuffix}))
+
+
+    ##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${mapperPackageName}.${daoName}">
+
+    <resultMap id="BaseResultMap" type="$!{modelPackageName}.$!{tableInfo.name}">
+        <!--@Table $!{tableInfo.obj.name}-->
+#foreach($column in $tableInfo.fullColumn)
+        <result property="$!column.name" column="$!column.obj.name" jdbcType="$!column.ext.jdbcType"/>
+#end
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        #allSqlColumn()
+    </sql>
+
+    <!--分页查询-->
+    <select id="selectPageRel" resultType="$!{dtoPackageName}.$!{tableInfo.name}Dto">
+    </select>
+</mapper>

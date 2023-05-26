@@ -1,0 +1,36 @@
+##定义初始变量
+$!{mybatisCodehelper.vm}
+$!{init.vm}
+$!{define.vm}
+#set($ServiceImplName = $tool.append($tableInfo.name, "Service"))
+##设置回调
+##$!callback.setFileName($tool.append($ServiceImplName, ".java"))
+##$!callback.setSavePath($tool.append($tableInfo.savePath, "/service/impl"))
+#set($serviceSavePath = $tool.append(${serviceSrcFolder},"/",${servicePackageName.replace(".","/")}))
+
+$!callback.setSavePath($serviceSavePath)
+$!callback.setFileName($tool.append($ServiceImplName, ".java"))
+
+#set($daoName = $tool.append($tableInfo.name, ${daoSuffix}))
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+
+package $!{servicePackageName};
+
+import com.nari.core.basic.BasicService;
+import $!{modelPackageName}.$!{tableInfo.name};
+import $!{paramPackageName}.$!{tableInfo.name}Param;
+import $!{viewPackageName}.$!{tableInfo.name}View;
+import $!{transformPackageName}.$!{tableInfo.name}Transform;
+import $!{dtoPackageName}.$!{tableInfo.name}Dto;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+#tableComment("业务处理")
+@Slf4j
+@Service("$!tool.firstLowerCase($!{tableInfo.name})Service")
+public class $!{ServiceImplName} extends BasicService<$!{tableInfo.name}, $!{tableInfo.name}Param, $!{tableInfo.name}View, $!{tableInfo.name}Dto, $!{tableInfo.name}Transform>{
+
+}

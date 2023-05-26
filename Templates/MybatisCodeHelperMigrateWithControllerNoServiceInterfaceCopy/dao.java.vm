@@ -1,0 +1,36 @@
+#* @vtlvariable name="mapperPackageName" type="java.lang.String" *#
+##引入宏定义
+$!{define.vm}
+$!{init.vm}
+$!{mybatisCodehelper.vm}
+
+##使用宏定义设置回调（保存位置与文件后缀）
+###save("/entity", ".java")
+
+#set($entitySavePath = $tool.append(${javamodelSrcFolder},"/",${mapperPackageName.replace(".","/")}))
+
+$!callback.setSavePath($entitySavePath)
+$!callback.setFileName($tool.append($tableInfo.name,'Mapper', ".java"))
+##使用宏定义设置包后缀
+package ${mapperPackageName};
+##使用全局变量实现默认包导入
+import java.io.Serializable;
+import java.util.List;
+
+import lombok.Data;
+import io.swagger.annotations.ApiModel;
+
+import $!{modelPackageName}.$!{tableInfo.name};
+import $!{paramPackageName}.$!{tableInfo.name}Param;
+import $!{dtoPackageName}.$!{tableInfo.name}Dto;
+import com.nari.core.basic.BasicDao;
+import com.nari.core.web.PageParam;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+##使用宏定义实现类注释信息
+#tableComment("SQL处理")
+@Mapper
+public interface  $!{tableInfo.name}Mapper extends BasicDao<$!{tableInfo.name}, $!{tableInfo.name}Dto, $!{tableInfo.name}Param>{
+    List<$!{tableInfo.name}Dto> selectPageRel(@Param("page") PageParam<$!{tableInfo.name}Dto, $!{tableInfo.name}Param> page, @Param("param") $!{tableInfo.name}Param param);
+}
