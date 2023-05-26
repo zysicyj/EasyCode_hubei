@@ -1,6 +1,9 @@
 ## 干什么的
 配合优化的项目架构，能够自动生成基础CURUD，实现10秒钟开发新业务接口
 
+## 网址
+https://brucege.com/doc/#/generateByTemplate
+
 ## 自动生成以下类，还有一个xml没截取到
 ![image](https://github.com/zysicyj/EasyCode_hubei/assets/64080867/b730d785-bbf2-4ef6-9a3f-b5aaccb981a6)
 
